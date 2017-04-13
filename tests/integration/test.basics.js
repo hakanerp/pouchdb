@@ -474,6 +474,10 @@ adapters.forEach(function (adapter) {
     });
 
     it('Doc validation', function (done) {
+      if (testUtils.isCouchVersion('1.6.1') ||
+        testUtils.isCouchVersion('2.0.0')) {
+          return done();
+      }
       var bad_docs = [
         {'_zing': 4},
         {'_zoom': 'hello'},
