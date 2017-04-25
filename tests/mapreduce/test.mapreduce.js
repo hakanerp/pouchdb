@@ -1207,6 +1207,18 @@ function tests(suiteName, dbName, dbType, viewType) {
       };
       var doc1 = {_id: '1', foo: 'bar'};
       var doc2 = {_id: '1', foo: 'baz'};
+      var conflictsView = {
+        _id: '_design/conflicts',
+        views: {
+          conflicts: {
+            map: function (doc) {
+              if (doc._conflicts) {
+                emit(doc._conflicts, null);
+              }
+            }.toString()
+          }
+        }
+      };
       var db = new PouchDB(dbName);
       return testUtils.fin(db.info().then(function () {
         var remote = new PouchDB(db2name);
@@ -1217,11 +1229,12 @@ function tests(suiteName, dbName, dbType, viewType) {
           }).then(function () {
             return replicate(remote);
           }).then(function () {
-            return db.query(function (doc) {
-              if (doc._conflicts) {
-                emit(doc._conflicts, null);
-              }
-            }, {include_docs : true, conflicts: true});
+            return db.post(conflictsView);
+          }).then(function () {
+            return db.query('conflicts', {
+              include_docs : true,
+              conflicts: true
+            });
           }).then(function (res) {
             should.exist(res.rows[0].doc._conflicts);
             return db.get(res.rows[0].doc._id, {conflicts: true});
