@@ -14,6 +14,8 @@ function uniq(list) {
 }
 
 testUtils.isCouchMaster = function () {
+  // no SERVER specified means we're using the default
+  // (couch master)
   return !('SERVER' in testUtils.params()) ||
     testUtils.isCouchVersion('2.0');
 };

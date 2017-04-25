@@ -152,8 +152,6 @@ function tests(suiteName, dbName, dbType, viewType) {
           ]
         });
       });
-    }
-    if (viewType === 'temp') {
 
       it('Test simultaneous temp views', function () {
         var db = new PouchDB(dbName);
@@ -1190,7 +1188,7 @@ function tests(suiteName, dbName, dbType, viewType) {
       }).should.be.rejected;
     });
 
-    if (viewType === 'temp') {
+    if (dbType === 'local' && viewType === 'temp') {
       it("No reduce function, passing just a function", function () {
         var db = new PouchDB(dbName);
         return db.post({foo: 'bar'}).then(function () {
