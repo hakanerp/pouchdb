@@ -96,6 +96,7 @@ The above is a simple example. For an in-depth tutorial, please refer to
   * `$mod` Matches documents where (field % Divisor == Remainder) is true, and only when the document field is an integer.
   * `$regex` A regular expression pattern to match against the document field.
   * `$elemMatch` Matches all documents that contain an array field with at least one element that matches all the specified query criteria.
+  * `$allMatch` Matches all documents when all items in an array match the specified selector
 * `fields` (Optional) Defines a list of fields that you want to receive. If omitted, you get the full documents.
 * `sort` (Optional) Defines a list of fields defining how you want to sort. Note that sorted fields also have to be selected in the `selector`.
 * `limit` (Optional) Maximum number of documents to return.
