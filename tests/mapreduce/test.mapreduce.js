@@ -1,11 +1,14 @@
 /* global sum */
 'use strict';
 
-var adapters = ['local', 'http'];
+var adapters = {
+ 'local':['persisted','temp'],
+ 'http':['persisted']
+};
 
-adapters.forEach(function (adapter) {
+Object.keys(adapters).forEach(function (adapter) {
 
-  var viewTypes = ['persisted', 'temp'];
+  var viewTypes = adapters[adapter];
   viewTypes.forEach(function (viewType) {
     var suiteName = 'test.mapreduce.js-' + adapter + '-' + viewType;
     var dbName = testUtils.adapterUrl(adapter, 'testdb');
@@ -125,7 +128,7 @@ function tests(suiteName, dbName, dbType, viewType) {
       });
     });
 
-    if (dbType === 'local' && viewType === 'temp') {
+    if (viewType === 'temp') {
       it("with a closure", function () {
         var db = new PouchDB(dbName);
         return db.bulkDocs({docs: [
@@ -1188,7 +1191,7 @@ function tests(suiteName, dbName, dbType, viewType) {
       }).should.be.rejected;
     });
 
-    if (dbType === 'local' && viewType === 'temp') {
+    if (viewType === 'temp') {
       it("No reduce function, passing just a function", function () {
         var db = new PouchDB(dbName);
         return db.post({foo: 'bar'}).then(function () {
